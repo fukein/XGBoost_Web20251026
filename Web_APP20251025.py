@@ -142,7 +142,7 @@ if st.button("Predict Risk", type="primary", use_container_width=True, key="pred
     pred_proba = model.predict_proba(input_data)[0]
     risk_prob = pred_proba[1] * 100
 
-    # 计算风险等级（关键：先定义status和color）
+    # 计算风险等级
     if risk_prob < 30:
         status, color = "Low Risk", "green"
     elif 30 <= risk_prob < 70:
@@ -209,3 +209,4 @@ if "pred_results" in st.session_state:
         shap_df["Absolute Contribution"] = shap_df["SHAP Value (Contribution)"].abs()
         shap_df_sorted = shap_df.sort_values("Absolute Contribution", ascending=False).drop("Absolute Contribution", axis=1)
         st.dataframe(shap_df_sorted, use_container_width=True)  
+
