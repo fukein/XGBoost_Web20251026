@@ -200,9 +200,6 @@ if "pred_results" in st.session_state:
     )
 
     plt.figure(figsize=(12, 8))
-    plt.rcParams['font.sans-serif'] = ['SimHei', 'WenQuanYi Zen Hei', 'PingFang SC', 'Microsoft YaHei']
-    plt.rcParams['font.family'] = 'sans-serif'  # 明确使用无衬线字体族
-    plt.rcParams['axes.unicode_minus'] = False  # 解决负号显示为方块的问题
     shap.plots.waterfall(shap_exp, max_display=10, show=False)
     plt.tight_layout()
     plt.savefig("shap_waterfall.png", dpi=300, bbox_inches='tight')
@@ -219,3 +216,4 @@ if "pred_results" in st.session_state:
         shap_df_sorted = shap_df.sort_values("Absolute Contribution", ascending=False).drop("Absolute Contribution", axis=1)
 
         st.dataframe(shap_df_sorted, use_container_width=True)  
+
