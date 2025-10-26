@@ -6,8 +6,9 @@ import matplotlib.pyplot as plt
 import joblib
 
 # ---------------------- 1. 基础配置 ----------------------
-plt.rcParams["font.family"] = ["Times New Roman", "SimHei"]
-plt.rcParams['axes.unicode_minus'] = False
+# 中文：SimHei；英文：Times New Roman
+chinese_font = FontProperties(fname='./simhei.ttf', size=10)
+english_font = FontProperties(fname='./times.ttf', size=10)
 
 # ---------------------- 2. 自定义CSS：统一样式 & 蓝色按钮 ----------------------
 st.markdown("""
@@ -200,6 +201,8 @@ if "pred_results" in st.session_state:
     )
 
     plt.figure(figsize=(12, 8))
+    plt.rcParams['font.sans-serif'] = [chinese_font.get_name()]  # 中文用SimHei
+    plt.rcParams['font.serif'] = [english_font.get_name()]       # 英文用Times New Roman
     shap.plots.waterfall(shap_exp, max_display=10, show=False)
     plt.tight_layout()
     plt.savefig("shap_waterfall.png", dpi=300, bbox_inches='tight')
@@ -216,4 +219,5 @@ if "pred_results" in st.session_state:
         shap_df_sorted = shap_df.sort_values("Absolute Contribution", ascending=False).drop("Absolute Contribution", axis=1)
 
         st.dataframe(shap_df_sorted, use_container_width=True)  
+
 
