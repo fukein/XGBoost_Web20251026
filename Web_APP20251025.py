@@ -4,13 +4,10 @@ import pandas as pd
 import shap
 import matplotlib.pyplot as plt
 import joblib
-from matplotlib.font_manager import FontProperties  
 
 # ---------------------- 1. 基础配置 ----------------------
-# 中文：SimHei；英文：Times New Roman
-chinese_font = FontProperties(fname='./simhei.ttf', size=10)
-english_font = FontProperties(fname='./times.ttf', size=10)
-plt.rcParams['axes.unicode_minus'] = False  # 解决负号显示异常
+plt.rcParams["font.family"] = ["Times New Roman", "SimHei"]
+plt.rcParams['axes.unicode_minus'] = False
 
 # ---------------------- 2. 自定义CSS：统一样式 & 蓝色按钮 ----------------------
 st.markdown("""
@@ -39,7 +36,7 @@ body {
 
 .label-col {
     text-align: left !important;
-    width: 180px;
+    width: 220px;
     padding-right: 10px;
     font-size: 13px;
 }
@@ -78,36 +75,30 @@ try:
 except FileNotFoundError:
     st.error("Model file not found! Ensure 'xgboost_model.pkl' is in the current directory.")
     st.stop()
-
-# 定义特征范围
+    
 feature_ranges = {
-    '年龄（岁）': {"type": "numerical", "min": 18.0, "max": 90.0, "default": 55.0},
-    '体重指数（BMI）': {"type": "numerical", "min": 18.0, "max": 35.0, "default": 24.0},
-    '收缩压（mmHg）': {"type": "numerical", "min": 90.0, "max": 160.0, "default": 120.0},
-    '舒张压（mmHg）': {"type": "numerical", "min": 60.0, "max": 100.0, "default": 80.0},
-    '空腹血糖（mmol/L）': {"type": "numerical", "min": 3.9, "max": 11.1, "default": 5.2},
-    '肌酐（μmol/L）': {"type": "numerical", "min": 40.0, "max": 133.0, "default": 70.0},
-    '尿素氮（mmol/L）': {"type": "numerical", "min": 2.5, "max": 8.2, "default": 5.0},
-    '血红蛋白（g/L）': {"type": "numerical", "min": 110.0, "max": 160.0, "default": 130.0},
-    '白细胞计数（×10^9/L）': {"type": "numerical", "min": 3.5, "max": 9.5, "default": 6.0},
-    '血小板计数（×10^9/L）': {"type": "numerical", "min": 125.0, "max": 350.0, "default": 200.0},
-    '总胆固醇（mmol/L）': {"type": "numerical", "min": 3.1, "max": 6.2, "default": 4.5},
-    '甘油三酯（mmol/L）': {"type": "numerical", "min": 0.5, "max": 3.0, "default": 1.5},
-    '高密度脂蛋白（mmol/L）': {"type": "numerical", "min": 0.9, "max": 1.5, "default": 1.2},
-    '低密度脂蛋白（mmol/L）': {"type": "numerical", "min": 2.0, "max": 4.1, "default": 3.0},
-    '钠（mmol/L）': {"type": "numerical", "min": 135.0, "max": 145.0, "default": 140.0},
-    '钾（mmol/L）': {"type": "numerical", "min": 3.5, "max": 5.5, "default": 4.2},
-    '氯（mmol/L）': {"type": "numerical", "min": 95.0, "max": 105.0, "default": 100.0},
-    '白蛋白（g/L）': {"type": "numerical", "min": 35.0, "max": 50.0, "default": 40.0},
-    '性别': {"type": "categorical", "options": [0, 1], "label": ["Male (0)", "Female (1)"]},
-    '糖尿病分级': {"type": "categorical", "options": [0, 1, 2], "label": ["None (0)", "Mild (1)", "Severe (2)"]},
-    '高血压分级': {"type": "categorical", "options": [0, 1, 2], "label": ["None (0)", "Grade 1 (1)", "Grade 2 (2)"]}
+    'Age (years)': {"type": "numerical", "min": 18.0, "max": 90.0, "default": 55.0},
+    'BMI': {"type": "numerical", "min": 18.0, "max": 35.0, "default": 24.0},
+    'Systolic BP (mmHg)': {"type": "numerical", "min": 90.0, "max": 160.0, "default": 120.0},
+    'Diastolic BP (mmHg)': {"type": "numerical", "min": 60.0, "max": 100.0, "default": 80.0},
+    'Fasting Blood Glucose (mmol/L)': {"type": "numerical", "min": 3.9, "max": 11.1, "default": 5.2},
+    'Creatinine (μmol/L)': {"type": "numerical", "min": 40.0, "max": 133.0, "default": 70.0},
+    'Urea Nitrogen (mmol/L)': {"type": "numerical", "min": 2.5, "max": 8.2, "default": 5.0},
+    'Hemoglobin (g/L)': {"type": "numerical", "min": 110.0, "max": 160.0, "default": 130.0},
+    'White Blood Cell(×10^9/L)': {"type": "numerical", "min": 3.5, "max": 9.5, "default": 6.0},
+    'Platelet Count (×10^9/L)': {"type": "numerical", "min": 125.0, "max": 350.0, "default": 200.0},
+    'Cholesterol (mmol/L)': {"type": "numerical", "min": 3.1, "max": 6.2, "default": 4.5},
+    'Triglycerides (mmol/L)': {"type": "numerical", "min": 0.5, "max": 3.0, "default": 1.5},
+    'HDL-C (mmol/L)': {"type": "numerical", "min": 0.9, "max": 1.5, "default": 1.2},
+    'LDL-C (mmol/L)': {"type": "numerical", "min": 2.0, "max": 4.1, "default": 3.0},
+    'Sodium (mmol/L)': {"type": "numerical", "min": 135.0, "max": 145.0, "default": 140.0},
+    'Potassium (mmol/L)': {"type": "numerical", "min": 3.5, "max": 5.5, "default": 4.2},
+    'Chloride (mmol/L)': {"type": "numerical", "min": 95.0, "max": 105.0, "default": 100.0},
+    'Albumin (g/L)': {"type": "numerical", "min": 35.0, "max": 50.0, "default": 40.0},
+    'Gender': {"type": "categorical", "options": [0, 1], "label": ["Male (0)", "Female (1)"]},
+    'Diabetes Classification': {"type": "categorical", "options": [0, 1, 2], "label": ["None (0)", "Mild (1)", "Severe (2)"]},
+    'Hypertension Classification': {"type": "categorical", "options": [0, 1, 2], "label": ["None (0)", "Grade 1 (1)", "Grade 2 (2)"]}
 }
-
-
-# ---------------------- 4. 页面结构 ----------------------
-st.title("Clinical Disease Risk Prediction", anchor=False)
-st.markdown("Enter clinical indicators to predict disease risk and view feature contributions.")
 
 # 临床指标模块（3列布局）
 with st.container():
@@ -120,8 +111,8 @@ with st.container():
         with cols[idx % 3]:
             st.markdown(f'<div style="display: flex; align-items: center; margin-bottom: 15px;"><div class="label-col">{feature}</div><div class="input-col">', unsafe_allow_html=True)
             if props["type"] == "numerical":
-                step = 0.1 if feature in ["体重指数（BMI）", "空腹血糖（mmol/L）"] else 1.0
-                fmt = "%.1f" if feature in ["体重指数（BMI）", "空腹血糖（mmol/L）"] else "%.0f"
+                step = 0.1 if feature in ["BMI", "Fasting Blood Glucose (mmol/L)"] else 1.0
+                fmt = "%.1f" if feature in ["BMI", "Fasting Blood Glucose (mmol/L)"] else "%.0f"
                 value = st.number_input(
                     feature,
                     min_value=float(props["min"]),
@@ -203,8 +194,6 @@ if "pred_results" in st.session_state:
     )
 
     plt.figure(figsize=(12, 8))
-    plt.rcParams['font.sans-serif'] = [chinese_font.get_name()]  # 中文用SimHei
-    plt.rcParams['font.serif'] = [english_font.get_name()]       # 英文用Times New Roman
     shap.plots.waterfall(shap_exp, max_display=10, show=False)
     plt.tight_layout()
     plt.savefig("shap_waterfall.png", dpi=300, bbox_inches='tight')
@@ -219,8 +208,4 @@ if "pred_results" in st.session_state:
         })
         shap_df["Absolute Contribution"] = shap_df["SHAP Value (Contribution)"].abs()
         shap_df_sorted = shap_df.sort_values("Absolute Contribution", ascending=False).drop("Absolute Contribution", axis=1)
-
         st.dataframe(shap_df_sorted, use_container_width=True)  
-
-
-
