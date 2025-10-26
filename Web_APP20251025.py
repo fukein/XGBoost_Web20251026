@@ -4,11 +4,13 @@ import pandas as pd
 import shap
 import matplotlib.pyplot as plt
 import joblib
+from matplotlib.font_manager import FontProperties  
 
 # ---------------------- 1. 基础配置 ----------------------
 # 中文：SimHei；英文：Times New Roman
 chinese_font = FontProperties(fname='./simhei.ttf', size=10)
 english_font = FontProperties(fname='./times.ttf', size=10)
+plt.rcParams['axes.unicode_minus'] = False  # 解决负号显示异常
 
 # ---------------------- 2. 自定义CSS：统一样式 & 蓝色按钮 ----------------------
 st.markdown("""
@@ -219,5 +221,6 @@ if "pred_results" in st.session_state:
         shap_df_sorted = shap_df.sort_values("Absolute Contribution", ascending=False).drop("Absolute Contribution", axis=1)
 
         st.dataframe(shap_df_sorted, use_container_width=True)  
+
 
 
