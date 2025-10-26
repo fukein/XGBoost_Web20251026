@@ -1,6 +1,4 @@
-# XGBoost_Web20251026
-
-## Clinical Disease Risk Prediction Web App
+# Clinical Disease Risk Prediction Web App
 A Streamlit-based interactive web application that predicts clinical disease risk using a pre-trained XGBoost model, with SHAP (SHapley Additive exPlanations) visualization to interpret feature contributions.
 
 ## Key Features
